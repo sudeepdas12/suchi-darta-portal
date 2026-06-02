@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>मौजुदा सूची दर्ता फारम - Suchi Darta Registration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    .form-input {
+      width: 100%;
+      border-radius: 0.5rem;
+      border: 1px solid #e6eef6;
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+      color: #0f172a;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.03);
+      transition: box-shadow .15s ease, border-color .15s ease;
+    }
+    .form-input::placeholder { color: #94a3b8; }
+    .form-input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 6px rgba(59,130,246,0.06); }
+    /* Ensure main card sits above decorative background */
+    #appCard { position: relative; z-index: 1; }
+    /* Make dropzones more robust to layout shifts */
+    .dropzone { min-height: 64px; }
+  </style>
+</head>
+<body class="text-slate-800 min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
+
+  <!-- Decorative background blobs and premium gradient (fixed full-viewport to avoid clipping) -->
+  <div id="premium-bg" aria-hidden="true" style="position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;">
+    <div style="position:absolute;left:-5rem;top:-10rem;width:24rem;height:24rem;border-radius:9999px;background: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.35), rgba(99,102,241,0.10) 40%, transparent 60%); filter: blur(60px); opacity:0.95; transform:translateZ(0);"></div>
+    <div style="position:absolute;right:-8rem;bottom:-12rem;width:28rem;height:28rem;border-radius:9999px;background: radial-gradient(circle at 70% 70%, rgba(250,204,21,0.22), rgba(239,68,68,0.08) 40%, transparent 60%); filter: blur(80px); opacity:0.9; transform:translateZ(0);"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(6,11,23,0.18) 0%, rgba(15,23,42,0.18) 100%);mix-blend-mode:overlay;"></div>
+  </div>
+
+  <div id="appCard" class="w-full max-w-2xl rounded-2xl p-6 sm:p-8" style="background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.78)); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(2,6,23,0.45); backdrop-filter: blur(8px) saturate(120%);">
+    <div class="mb-8 border-b border-slate-100 pb-6">
+      <div class="text-center">
+        <h1 class="text-3xl font-extrabold tracking-wider text-indigo-700 mb-1">आरविवि मर्चेन्ट बैंकिङ्ग लि.</h1>
+        <h2 class="text-2xl font-extrabold tracking-tight text-slate-900">मौजुदा सूची दर्ता फारम</h2>
+        <p class="text-sm text-slate-500 mt-1">Suchi Darta Registration — कृपया आवश्यक कागजातहरू अपलोड गर्नुहोस्</p>
+      </div>
+    </div>
+
+    <form id="suchiDartaForm" onsubmit="handleFormSubmit(event)" class="space-y-6">
+      
+      <div class="space-y-4">
+        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-wider">१. विवरणहरू (Company Profile)</h4>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="companyName" class="block text-sm font-medium text-slate-700 mb-1">फर्म / कम्पनीको नाम (Company Name) <span class="text-red-500">*</span></label>
+            <input type="text" id="companyName" required 
+              class="form-input" placeholder="e.g. ABC Traders">
+          </div>
+          <div>
+            <label for="fullName" class="block text-sm font-medium text-slate-700 mb-1">प्रोप्राइटर / सम्पर्क व्यक्तिको नाम (Full Name) <span class="text-red-500">*</span></label>
+            <input type="text" id="fullName" required 
+              class="form-input" placeholder="Authorized Representative Name">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="panNumber" class="block text-sm font-medium text-slate-700 mb-1">स्थायी लेखा नम्बर / प्यान (PAN No.) <span class="text-red-500">*</span></label>
+            <input type="text" id="panNumber" pattern="\d{9}" required maxlength="9"
+              class="form-input" placeholder="9-digit PAN Number">
+          </div>
+          <div>
+            <label for="contactNumber" class="block text-sm font-medium text-slate-700 mb-1">सम्पर्क फोन नम्बर (Contact Number) <span class="text-red-500">*</span></label>
+            <input type="tel" id="contactNumber" required 
+              class="form-input" placeholder="Mobile or Landline No.">
+          </div>
+        </div>
+
+        <div>
+          <label for="address" class="block text-sm font-medium text-slate-700 mb-1">कम्पनीको ठेगाना (Company Address) <span class="text-red-500">*</span></label>
+          <input type="text" id="address" required 
+            class="form-input" placeholder="e.g. Ward No, Municipality, District">
+        </div>
+
+        <div>
+          <label for="companySales" class="block text-sm font-medium text-slate-700 mb-1">आपूर्ति वा सेवाको विधा (Nature of Goods / Services Sold) <span class="text-red-500">*</span></label>
+          <textarea id="companySales" rows="2" required 
+            class="form-input" placeholder="Describe what items or services your business supplies..."></textarea>
+        </div>
+      </div>
+
+      <hr class="border-slate-100">
+
+      <div class="space-y-4">
+        <h4 class="text-sm font-bold text-slate-400 uppercase tracking-wider">२. आवश्यक कागजातहरू (Required Documents)</h4>
+
+        <p class="text-xs text-slate-400">Drag & drop files or click to choose. Max recommended file size: <strong>10 MB</strong></p>
+
+        <div class="grid grid-cols-1 gap-4">
+          <!-- Reusable upload block: PAN -->
+          <div class="upload-block p-3 bg-slate-50 rounded-xl border border-slate-200" id="pan-block">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">प्यान दर्ता प्रमाणपत्र (PAN Registration Certificate) <span class="text-red-500">*</span></label>
+            <div class="dropzone flex items-center justify-between gap-4 p-3 rounded-lg border-2 border-dashed border-slate-200 bg-white hover:border-blue-300 transition-all" data-input="docPan" data-info="pan-info">
+              <div class="flex items-center gap-3">
+                <svg class="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16V4a1 1 0 011-1h8a1 1 0 011 1v12M7 12h10M9 20h6"></path></svg>
+                <div>
+                  <div class="text-sm text-slate-600" id="pan-info">No file selected</div>
+                  <div class="text-xs text-slate-400 mt-0.5" id="pan-size"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button type="button" class="choose-btn bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50">Choose</button>
+                <input type="file" id="docPan" class="sr-only" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Company Registration -->
+          <div class="upload-block p-3 bg-slate-50 rounded-xl border border-slate-200" id="reg-block">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">कम्पनी/फर्म दर्ता प्रमाणपत्र (Company Registration) <span class="text-red-500">*</span></label>
+            <div class="dropzone flex items-center justify-between gap-4 p-3 rounded-lg border-2 border-dashed border-slate-200 bg-white hover:border-blue-300 transition-all" data-input="docReg" data-info="reg-info">
+              <div class="flex items-center gap-3">
+                <svg class="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7h18M7 7v14h10V7"></path></svg>
+                <div>
+                  <div class="text-sm text-slate-600" id="reg-info">No file selected</div>
+                  <div class="text-xs text-slate-400 mt-0.5" id="reg-size"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button type="button" class="choose-btn bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50">Choose</button>
+                <input type="file" id="docReg" class="sr-only" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tax Clearance -->
+          <div class="upload-block p-3 bg-slate-50 rounded-xl border border-slate-200" id="tax-block">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">कर चुक्ता प्रमाणपत्र (Tax Clearance Certificate) <span class="text-red-500">*</span></label>
+            <div class="dropzone flex items-center justify-between gap-4 p-3 rounded-lg border-2 border-dashed border-slate-200 bg-white hover:border-blue-300 transition-all" data-input="docTax" data-info="tax-info">
+              <div class="flex items-center gap-3">
+                <svg class="w-7 h-7 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v8M8 12h8"></path></svg>
+                <div>
+                  <div class="text-sm text-slate-600" id="tax-info">No file selected</div>
+                  <div class="text-xs text-slate-400 mt-0.5" id="tax-size"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button type="button" class="choose-btn bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50">Choose</button>
+                <input type="file" id="docTax" class="sr-only" required>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" id="submitBtn"
+          class="w-full flex justify-center items-center rounded-lg px-4 py-3 text-sm font-semibold text-white shadow-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 active:scale-[0.99] transition-transform disabled:opacity-50">
+          दर्ता गर्नुहोस् (Submit Registration)
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB recommended
+
+    function formatBytes(bytes) {
+      if (!bytes) return '0 B';
+      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${sizes[i]}`;
+    }
+
+    function setFileInfoFor(inputEl, infoEl, sizeEl) {
+      const file = inputEl.files[0];
+      if (!file) {
+        infoEl.textContent = 'No file selected';
+        infoEl.className = 'text-sm text-slate-600';
+        if (sizeEl) sizeEl.textContent = '';
+        inputEl.setCustomValidity('');
+        return;
+      }
+
+      const sizeText = formatBytes(file.size);
+      infoEl.textContent = `${file.name}`;
+      infoEl.className = 'text-sm font-medium text-emerald-600';
+      if (sizeEl) sizeEl.textContent = sizeText;
+
+      if (file.size > MAX_FILE_BYTES) {
+        sizeEl.textContent = `${sizeText} — Too large (recommended ≤ 10 MB)`;
+        sizeEl.className = 'text-xs text-red-600 mt-0.5';
+        inputEl.setCustomValidity('File too large');
+      } else {
+        sizeEl.className = 'text-xs text-slate-400 mt-0.5';
+        inputEl.setCustomValidity('');
+      }
+    }
+
+    function setupDropzone(dropzone) {
+      const inputId = dropzone.dataset.input;
+      const infoId = dropzone.dataset.info;
+      const input = document.getElementById(inputId);
+      const info = document.getElementById(infoId);
+      const sizeId = inputId.replace('doc', '').toLowerCase() + '-size';
+      const sizeEl = document.getElementById(sizeId);
+
+      // clicks from custom button
+      const chooseBtn = dropzone.querySelector('.choose-btn');
+      chooseBtn.addEventListener('click', () => input.click());
+
+      // file chosen
+      input.addEventListener('change', () => setFileInfoFor(input, info, sizeEl));
+
+      // drag events
+      ['dragenter', 'dragover'].forEach(ev => {
+        dropzone.addEventListener(ev, (e) => {
+          e.preventDefault(); e.stopPropagation();
+          dropzone.classList.add('border-blue-400', 'bg-blue-50');
+        });
+      });
+      ['dragleave', 'drop'].forEach(ev => {
+        dropzone.addEventListener(ev, (e) => {
+          e.preventDefault(); e.stopPropagation();
+          dropzone.classList.remove('border-blue-400', 'bg-blue-50');
+        });
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        if (dt && dt.files && dt.files.length) {
+          input.files = dt.files;
+          setFileInfoFor(input, info, sizeEl);
+        }
+      });
+    }
+
+    // Helper pipeline executing upload requests against Vercel backend point
+    async function directUploadToB2(fileInstance) {
+      const tokenResponse = await fetch('/api/get-upload-url', { method: 'POST' });
+      if (!tokenResponse.ok) throw new Error('Authorization endpoint failed');
+      const { uploadUrl, uploadAuthToken } = await tokenResponse.json();
+
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'POST',
+        headers: {
+          'Authorization': uploadAuthToken,
+          'X-Bz-File-Name': encodeURIComponent(`${Date.now()}_${fileInstance.name}`),
+          'Content-Type': fileInstance.type,
+          'X-Bz-Content-Sha1': 'do_not_verify'
+        },
+        body: fileInstance
+      });
+
+      if (!uploadResponse.ok) throw new Error(`Backblaze upload failed for ${fileInstance.name}`);
+      return await uploadResponse.json();
+    }
+
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'प्रक्रियामा छ... (Processing Documents...)';
+
+      try {
+        const filePan = document.getElementById('docPan').files[0];
+        const fileReg = document.getElementById('docReg').files[0];
+        const fileTax = document.getElementById('docTax').files[0];
+
+        if (!filePan || !fileReg || !fileTax) throw new Error('Please attach all required documents');
+
+        // optional: re-check sizes locally before upload
+        [filePan, fileReg, fileTax].forEach(f => {
+          if (f.size > MAX_FILE_BYTES) console.warn(`${f.name} is larger than recommended`);
+        });
+
+        const [resPan, resReg, resTax] = await Promise.all([
+          directUploadToB2(filePan),
+          directUploadToB2(fileReg),
+          directUploadToB2(fileTax)
+        ]);
+
+        const completeSuchiData = {
+          companyName: document.getElementById('companyName').value,
+          fullName: document.getElementById('fullName').value,
+          panNumber: document.getElementById('panNumber').value,
+          contactNumber: document.getElementById('contactNumber').value,
+          address: document.getElementById('address').value,
+          businessDescription: document.getElementById('companySales').value,
+          documents: {
+            panFileId: resPan.fileId,
+            registrationFileId: resReg.fileId,
+            taxClearanceFileId: resTax.fileId
+          }
+        };
+
+        console.log('Compiled Payload:', completeSuchiData);
+        alert('सूची दर्ता फारम सफलतापूर्वक प्राप्त भयो ! (Registration submitted successfully)');
+
+        document.getElementById('suchiDartaForm').reset();
+        ['pan-info','reg-info','tax-info'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.textContent = 'No file selected'; el.className = 'text-sm text-slate-600'; }
+        });
+        ['pan-size','reg-size','tax-size'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = '';
+        });
+
+      } catch (error) {
+        alert(`त्रुटि (Submission Error): ${error.message}`);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'दर्ता गर्नुहोस् (Submit Registration)';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.dropzone').forEach(setupDropzone);
+    });
+  </script>
+</body>
+</html>
