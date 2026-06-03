@@ -69,10 +69,13 @@ export default async function handler(req, res) {
       { header: 'Submitted At', key: 'submittedAt', width: 25 },
       { header: 'PAN File Name', key: 'panOriginalName', width: 40 },
       { header: 'PAN File Path', key: 'panStoredPath', width: 60 },
+      { header: 'PAN File ID', key: 'panFileId', width: 36 },
       { header: 'Registration File Name', key: 'registrationOriginalName', width: 40 },
       { header: 'Registration File Path', key: 'registrationStoredPath', width: 60 },
+      { header: 'Registration File ID', key: 'registrationFileId', width: 36 },
       { header: 'Tax Clearance File Name', key: 'taxClearanceOriginalName', width: 40 },
-      { header: 'Tax Clearance File Path', key: 'taxClearanceStoredPath', width: 60 }
+      { header: 'Tax Clearance File Path', key: 'taxClearanceStoredPath', width: 60 },
+      { header: 'Tax Clearance File ID', key: 'taxClearanceFileId', width: 36 }
     ];
 
     // Download and extract data from each summary file
@@ -89,20 +92,25 @@ export default async function handler(req, res) {
         const sheet = workbook.getWorksheet('Registration');
 
         if (sheet) {
+          // Get the first data row (row 2, since row 1 is headers)
+          const row = sheet.getRow(2);
           const rowData = {
-            companyName: sheet.getCell('B2').value || '',
-            fullName: sheet.getCell('B3').value || '',
-            panNumber: sheet.getCell('B4').value || '',
-            contactNumber: sheet.getCell('B5').value || '',
-            address: sheet.getCell('B6').value || '',
-            businessDescription: sheet.getCell('B7').value || '',
-            submittedAt: sheet.getCell('B8').value || '',
-            panOriginalName: sheet.getCell('B11').value || '',
-            panStoredPath: sheet.getCell('B12').value || '',
-            registrationOriginalName: sheet.getCell('B15').value || '',
-            registrationStoredPath: sheet.getCell('B16').value || '',
-            taxClearanceOriginalName: sheet.getCell('B19').value || '',
-            taxClearanceStoredPath: sheet.getCell('B20').value || ''
+            companyName: row.getCell(1).value || '',
+            fullName: row.getCell(2).value || '',
+            panNumber: row.getCell(3).value || '',
+            contactNumber: row.getCell(4).value || '',
+            address: row.getCell(5).value || '',
+            businessDescription: row.getCell(6).value || '',
+            submittedAt: row.getCell(7).value || '',
+            panOriginalName: row.getCell(8).value || '',
+            panStoredPath: row.getCell(9).value || '',
+            panFileId: row.getCell(10).value || '',
+            registrationOriginalName: row.getCell(11).value || '',
+            registrationStoredPath: row.getCell(12).value || '',
+            registrationFileId: row.getCell(13).value || '',
+            taxClearanceOriginalName: row.getCell(14).value || '',
+            taxClearanceStoredPath: row.getCell(15).value || '',
+            taxClearanceFileId: row.getCell(16).value || ''
           };
 
           masterSheet.addRow(rowData);
