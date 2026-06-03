@@ -19,6 +19,11 @@
   <div class="notice">
     Open this page with a token query string: <strong>admin.html?token=YOUR_TOKEN</strong>
   </div>
+
+  <div style="margin-bottom: 20px;">
+    <a id="consolidatedLink" href="#" style="display: inline-block; background: #059669; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">📥 Download Consolidated Report (All Submissions)</a>
+  </div>
+
   <div id="status">Loading summary file list...</div>
   <div id="content"></div>
 
@@ -33,6 +38,10 @@
         document.getElementById('status').textContent = 'Missing admin token. Use ?token=YOUR_TOKEN';
         return;
       }
+
+      // Set up consolidated download link
+      const consolidatedLink = document.getElementById('consolidatedLink');
+      consolidatedLink.href = `/api/export-consolidated?token=${encodeURIComponent(token)}`;
 
       try {
         const response = await fetch(`/api/list-summaries?token=${encodeURIComponent(token)}`);
