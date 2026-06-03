@@ -72,10 +72,20 @@ export default async function handler(req, res) {
             panNumber: row.getCell(3).value || '',
             shopType: row.getCell(7).value || '',
             documents: {
+              panOriginalName: row.getCell(9).value || '',
+              panStoredPath: row.getCell(10).value || '',
               panFileId: row.getCell(11).value || '',
+              registrationOriginalName: row.getCell(12).value || '',
+              registrationStoredPath: row.getCell(13).value || '',
               registrationFileId: row.getCell(14).value || '',
+              taxClearanceOriginalName: row.getCell(15).value || '',
+              taxClearanceStoredPath: row.getCell(16).value || '',
               taxClearanceFileId: row.getCell(17).value || '',
+              rateOriginalName: row.getCell(18).value || '',
+              rateStoredPath: row.getCell(19).value || '',
               rateFileId: row.getCell(20).value || '',
+              othersOriginalName: row.getCell(21).value || '',
+              othersStoredPath: row.getCell(22).value || '',
               othersFileId: row.getCell(23).value || ''
             }
           });

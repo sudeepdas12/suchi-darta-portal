@@ -60,12 +60,20 @@
 
         document.getElementById('status').textContent = `Found ${summaries.length} summary file(s).`;
         const rows = summaries.map(item => {
-          const rateLink = item.documents && item.documents.rateFileId
-            ? `<a href="/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.documents.rateFileId)}">Rate File</a>`
+          const rateFileId = item.documents && item.documents.rateFileId ? item.documents.rateFileId : '';
+          const rateStoredPath = item.documents && item.documents.rateStoredPath ? item.documents.rateStoredPath : '';
+          const rateName = rateStoredPath ? rateStoredPath.split('/').pop() : '';
+          const rateLink = rateFileId
+            ? `<a href="/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(rateFileId)}&name=${encodeURIComponent(rateName)}">${rateName || 'Rate File'}</a>`
             : '';
-          const othersLink = item.documents && item.documents.othersFileId
-            ? `<a href="/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.documents.othersFileId)}">Others File</a>`
+
+          const othersFileId = item.documents && item.documents.othersFileId ? item.documents.othersFileId : '';
+          const othersStoredPath = item.documents && item.documents.othersStoredPath ? item.documents.othersStoredPath : '';
+          const othersName = othersStoredPath ? othersStoredPath.split('/').pop() : '';
+          const othersLink = othersFileId
+            ? `<a href="/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(othersFileId)}&name=${encodeURIComponent(othersName)}">${othersName || 'Others File'}</a>`
             : '';
+
           return `
             <tr>
               <td>${item.companyName || item.fileName}</td>
