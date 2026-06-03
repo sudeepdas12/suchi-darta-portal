@@ -85,7 +85,7 @@
         </div>
 
         <div>
-          <label for="shopType" class="block text-sm font-medium text-slate-700 mb-1">दुकान/पाउच प्रकार (Shop Type)</label>
+          <label for="shopType" class="block text-sm font-medium text-slate-700 mb-1">पसलको प्रकार (Shop Type)</label>
           <select id="shopType" class="form-input">
             <option value="">-- छान्नुहोस् / Select --</option>
             <option value="distributor">वितरणकर्ता (Distributor)</option>
@@ -170,6 +170,24 @@
               <div class="flex items-center gap-3">
                 <button type="button" class="choose-btn bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50">Choose</button>
                 <input type="file" id="docOther" class="sr-only">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rate of Products (optional) -->
+          <div class="upload-block p-3 bg-slate-50 rounded-xl border border-slate-200" id="rate-block">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">वस्तुहरूको दर (Rate of Products) <span class="text-xs text-slate-400">(Optional)</span></label>
+            <div class="dropzone flex items-center justify-between gap-4 p-3 rounded-lg border-2 border-dashed border-slate-200 bg-white hover:border-blue-300 transition-all" data-input="docRate" data-info="rate-info">
+              <div class="flex items-center gap-3">
+                <svg class="w-7 h-7 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v8M8 12h8"></path></svg>
+                <div>
+                  <div class="text-sm text-slate-600" id="rate-info">No file selected</div>
+                  <div class="text-xs text-slate-400 mt-0.5" id="rate-size"></div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button type="button" class="choose-btn bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50">Choose</button>
+                <input type="file" id="docRate" class="sr-only">
               </div>
             </div>
           </div>
@@ -333,11 +351,13 @@
         const fileReg = document.getElementById('docReg').files[0];
         const fileTax = document.getElementById('docTax').files[0];
         const fileOther = document.getElementById('docOther') ? document.getElementById('docOther').files[0] : null;
+        const fileRate = document.getElementById('docRate') ? document.getElementById('docRate').files[0] : null;
 
         if (!filePan || !fileReg || !fileTax) throw new Error('Please attach all required documents');
 
         const filesToCheck = [filePan, fileReg, fileTax];
         if (fileOther) filesToCheck.push(fileOther);
+        if (fileRate) filesToCheck.push(fileRate);
 
         filesToCheck.forEach(f => {
           if (f.size > MAX_FILE_BYTES) {
@@ -356,6 +376,11 @@
         let resOther = null;
         if (fileOther) {
           resOther = await directUploadToB2(fileOther, `${userFolder}/attachments`);
+        }
+
+        let resRate = null;
+        if (fileRate) {
+          resRate = await directUploadToB2(fileRate, `${userFolder}/attachments`);
         }
 
         const completeSuchiData = {
@@ -386,16 +411,22 @@
           completeSuchiData.documents.othersStoredPath = resOther.storedFileName;
         }
 
+        if (resRate) {
+          completeSuchiData.documents.rateFileId = resRate.fileId;
+          completeSuchiData.documents.rateOriginalName = resRate.originalName;
+          completeSuchiData.documents.rateStoredPath = resRate.storedFileName;
+        }
+
         await submitRegistrationData(completeSuchiData);
         console.log('Compiled Payload:', completeSuchiData);
         alert('सूची दर्ता फारम सफलतापूर्वक प्राप्त भयो ! (Registration submitted successfully)');
 
         document.getElementById('suchiDartaForm').reset();
-        ['pan-info','reg-info','tax-info','other-info'].forEach(id => {
+        ['pan-info','reg-info','tax-info','other-info','rate-info'].forEach(id => {
           const el = document.getElementById(id);
           if (el) { el.textContent = 'No file selected'; el.className = 'text-sm text-slate-600'; }
         });
-        ['pan-size','reg-size','tax-size','other-size'].forEach(id => {
+        ['pan-size','reg-size','tax-size','other-size','rate-size'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.textContent = '';
         });

@@ -77,6 +77,9 @@ export default async function handler(req, res) {
       { header: 'Tax Clearance File Name', key: 'taxClearanceOriginalName', width: 40 },
       { header: 'Tax Clearance File Path', key: 'taxClearanceStoredPath', width: 60 },
       { header: 'Tax Clearance File ID', key: 'taxClearanceFileId', width: 36 },
+      { header: 'Rate File Name', key: 'rateOriginalName', width: 40 },
+      { header: 'Rate File Path', key: 'rateStoredPath', width: 60 },
+      { header: 'Rate File ID', key: 'rateFileId', width: 36 },
       { header: 'Others File Name', key: 'othersOriginalName', width: 40 },
       { header: 'Others File Path', key: 'othersStoredPath', width: 60 },
       { header: 'Others File ID', key: 'othersFileId', width: 36 }
@@ -116,9 +119,12 @@ export default async function handler(req, res) {
             taxClearanceOriginalName: row.getCell(15).value || '',
             taxClearanceStoredPath: row.getCell(16).value || '',
             taxClearanceFileId: row.getCell(17).value || '',
-            othersOriginalName: row.getCell(18).value || '',
-            othersStoredPath: row.getCell(19).value || '',
-            othersFileId: row.getCell(20).value || ''
+            rateOriginalName: row.getCell(18).value || '',
+            rateStoredPath: row.getCell(19).value || '',
+            rateFileId: row.getCell(20).value || '',
+            othersOriginalName: row.getCell(21).value || '',
+            othersStoredPath: row.getCell(22).value || '',
+            othersFileId: row.getCell(23).value || ''
           };
 
           masterSheet.addRow(rowData);

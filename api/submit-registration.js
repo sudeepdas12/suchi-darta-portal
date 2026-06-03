@@ -54,6 +54,9 @@ export default async function handler(req, res) {
       { header: 'Tax Clearance File Name', key: 'taxClearanceOriginalName', width: 40 },
       { header: 'Tax Clearance Stored Path', key: 'taxClearanceStoredPath', width: 60 },
       { header: 'Tax Clearance File ID', key: 'taxClearanceFileId', width: 36 },
+      { header: 'Rate File Name', key: 'rateOriginalName', width: 40 },
+      { header: 'Rate Stored Path', key: 'rateStoredPath', width: 60 },
+      { header: 'Rate File ID', key: 'rateFileId', width: 36 },
       { header: 'Others File Name', key: 'othersOriginalName', width: 40 },
       { header: 'Others Stored Path', key: 'othersStoredPath', width: 60 },
       { header: 'Others File ID', key: 'othersFileId', width: 36 }
@@ -77,6 +80,9 @@ export default async function handler(req, res) {
       taxClearanceOriginalName: safeText(payload.documents?.taxClearanceOriginalName),
       taxClearanceStoredPath: safeText(payload.documents?.taxClearanceStoredPath),
       taxClearanceFileId: safeText(payload.documents?.taxClearanceFileId),
+      rateOriginalName: safeText(payload.documents?.rateOriginalName),
+      rateStoredPath: safeText(payload.documents?.rateStoredPath),
+      rateFileId: safeText(payload.documents?.rateFileId),
       othersOriginalName: safeText(payload.documents?.othersOriginalName),
       othersStoredPath: safeText(payload.documents?.othersStoredPath),
       othersFileId: safeText(payload.documents?.othersFileId)
