@@ -5,6 +5,7 @@
   "type": "module",
   "main": "index.html",
   "dependencies": {
+    "archiver": "^8.0.0",
     "backblaze-b2": "^1.7.0",
     "exceljs": "^4.3.0"
   }

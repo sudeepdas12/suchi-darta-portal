@@ -81,16 +81,25 @@
               <td>${item.panNumber || ''}</td>
               <td>${item.shopType || ''}</td>
               <td>${item.fileId}</td>
+              const allLink = `<a href="/api/download-vendor-bundle?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">All Details</a>`;
+          return `
+            <tr>
+              <td>${item.companyName || item.fileName}</td>
+              <td>${item.fullName || ''}</td>
+              <td>${item.panNumber || ''}</td>
+              <td>${item.shopType || ''}</td>
+              <td>${item.fileId}</td>
               <td><a href="/api/download-summary?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">Summary</a></td>
               <td>${rateLink}</td>
               <td>${othersLink}</td>
+              <td>${allLink}</td>
             </tr>
           `;
         }).join('');
 
         document.getElementById('content').innerHTML = `
           <table>
-            <thead><tr><th>Company</th><th>Contact</th><th>PAN</th><th>Shop Type</th><th>Summary File ID</th><th>Summary</th><th>Rate</th><th>Others</th></tr></thead>
+            <thead><tr><th>Company</th><th>Contact</th><th>PAN</th><th>Shop Type</th><th>Summary File ID</th><th>Summary</th><th>Rate</th><th>Others</th><th>All</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
         `;
