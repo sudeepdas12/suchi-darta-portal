@@ -1,4 +1,5 @@
 import B2 from 'backblaze-b2';
+import ExcelJS from 'exceljs';
 
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
 
@@ -51,7 +52,43 @@ export default async function handler(req, res) {
       .filter(f => f.fileName.toLowerCase().endsWith('.xlsx') && f.fileName.includes('registration-'))
       .map(f => ({ fileName: f.fileName, fileId: f.fileId, uploadTimestamp: f.uploadTimestamp }));
 
-    return res.status(200).json({ summaries: summaryFiles });
+    // For each summary file, download and extract document metadata (fileIds, original names, stored paths)
+    const detailed = [];
+    for (const sf of summaryFiles) {
+      try {
+        const downloadResp = await b2.downloadFileById({ fileId: sf.fileId, responseType: 'arraybuffer' });
+        const buffer = Buffer.from(downloadResp.data);
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(buffer);
+        const sheet = workbook.getWorksheet('Registration');
+        if (sheet) {
+          const row = sheet.getRow(2);
+          detailed.push({
+            fileName: sf.fileName,
+            fileId: sf.fileId,
+            uploadTimestamp: sf.uploadTimestamp,
+            companyName: row.getCell(1).value || '',
+            fullName: row.getCell(2).value || '',
+            panNumber: row.getCell(3).value || '',
+            shopType: row.getCell(7).value || '',
+            documents: {
+              panFileId: row.getCell(11).value || '',
+              registrationFileId: row.getCell(14).value || '',
+              taxClearanceFileId: row.getCell(17).value || '',
+              rateFileId: row.getCell(20).value || '',
+              othersFileId: row.getCell(23).value || ''
+            }
+          });
+        } else {
+          detailed.push({ ...sf, documents: {} });
+        }
+      } catch (err) {
+        console.error('Failed to parse summary', sf.fileName, err.message);
+        detailed.push({ ...sf, documents: {} });
+      }
+    }
+
+    return res.status(200).json({ summaries: detailed });
   } catch (error) {
     return res.status(500).json({ error: error.message || 'Unable to list summary files' });
   }

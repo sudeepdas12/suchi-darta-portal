@@ -59,17 +59,30 @@
         }
 
         document.getElementById('status').textContent = `Found ${summaries.length} summary file(s).`;
-        const rows = summaries.map(item => `
-          <tr>
-            <td>${item.fileName}</td>
-            <td>${item.fileId}</td>
-            <td><a href="/api/download-summary?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">Download</a></td>
-          </tr>
-        `).join('');
+        const rows = summaries.map(item => {
+          const rateLink = item.documents && item.documents.rateFileId
+            ? `<a href="/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.documents.rateFileId)}">Rate File</a>`
+            : '';
+          const othersLink = item.documents && item.documents.othersFileId
+            ? `<a href="/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.documents.othersFileId)}">Others File</a>`
+            : '';
+          return `
+            <tr>
+              <td>${item.companyName || item.fileName}</td>
+              <td>${item.fullName || ''}</td>
+              <td>${item.panNumber || ''}</td>
+              <td>${item.shopType || ''}</td>
+              <td>${item.fileId}</td>
+              <td><a href="/api/download-summary?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">Summary</a></td>
+              <td>${rateLink}</td>
+              <td>${othersLink}</td>
+            </tr>
+          `;
+        }).join('');
 
         document.getElementById('content').innerHTML = `
           <table>
-            <thead><tr><th>File Name</th><th>File ID</th><th>Download</th></tr></thead>
+            <thead><tr><th>Company</th><th>Contact</th><th>PAN</th><th>Shop Type</th><th>Summary File ID</th><th>Summary</th><th>Rate</th><th>Others</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
         `;
