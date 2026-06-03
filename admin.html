@@ -70,6 +70,27 @@
 
         document.getElementById('status').textContent = `Found ${summaries.length} summary file(s).`;
         const rows = summaries.map(item => {
+          const panFileId = item.documents && item.documents.panFileId ? item.documents.panFileId : '';
+          const panStoredPath = item.documents && item.documents.panStoredPath ? item.documents.panStoredPath : '';
+          const panName = panStoredPath ? panStoredPath.split('/').pop() : '';
+          const panLink = panFileId
+            ? `<a class="button-link" href="${apiBaseUrl}/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(panFileId)}&name=${encodeURIComponent(panName)}">${panName || 'PAN File'}</a>`
+            : '<span class="small-text">No PAN file</span>';
+
+          const regFileId = item.documents && item.documents.registrationFileId ? item.documents.registrationFileId : '';
+          const regStoredPath = item.documents && item.documents.registrationStoredPath ? item.documents.registrationStoredPath : '';
+          const regName = regStoredPath ? regStoredPath.split('/').pop() : '';
+          const regLink = regFileId
+            ? `<a class="button-link" href="${apiBaseUrl}/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(regFileId)}&name=${encodeURIComponent(regName)}">${regName || 'Registration File'}</a>`
+            : '<span class="small-text">No Registration file</span>';
+
+          const taxFileId = item.documents && item.documents.taxClearanceFileId ? item.documents.taxClearanceFileId : '';
+          const taxStoredPath = item.documents && item.documents.taxClearanceStoredPath ? item.documents.taxClearanceStoredPath : '';
+          const taxName = taxStoredPath ? taxStoredPath.split('/').pop() : '';
+          const taxLink = taxFileId
+            ? `<a class="button-link" href="${apiBaseUrl}/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(taxFileId)}&name=${encodeURIComponent(taxName)}">${taxName || 'Tax File'}</a>`
+            : '<span class="small-text">No Tax file</span>';
+
           const rateFileId = item.documents && item.documents.rateFileId ? item.documents.rateFileId : '';
           const rateStoredPath = item.documents && item.documents.rateStoredPath ? item.documents.rateStoredPath : '';
           const rateName = rateStoredPath ? rateStoredPath.split('/').pop() : '';
@@ -96,6 +117,9 @@
               <td>${item.address || ''}</td>
               <td>${item.submittedAt || ''}</td>
               <td>${summaryLink}<span class="small-text">ID: ${item.fileId}</span></td>
+              <td>${panLink}</td>
+              <td>${regLink}</td>
+              <td>${taxLink}</td>
               <td>${rateLink}</td>
               <td>${othersLink}</td>
             </tr>
@@ -104,7 +128,7 @@
 
         document.getElementById('content').innerHTML = `
           <table>
-            <thead><tr><th>Company</th><th>Contact</th><th>Phone</th><th>PAN</th><th>Shop Type</th><th>Address</th><th>Submitted At</th><th>Summary</th><th>Rate</th><th>Others</th></tr></thead>
+            <thead><tr><th>Company</th><th>Contact</th><th>Phone</th><th>PAN</th><th>Shop Type</th><th>Address</th><th>Submitted At</th><th>Summary</th><th>PAN</th><th>Registration</th><th>Tax</th><th>Rate</th><th>Others</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
         `;
