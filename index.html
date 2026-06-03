@@ -232,9 +232,14 @@
       });
     }
 
+    // Use the deployment URL when the page is opened from file://, otherwise use same origin
+    const apiBaseUrl = window.location.protocol === 'file:'
+      ? 'https://suchi-darta-portal.vercel.app'
+      : window.location.origin;
+
     // Helper pipeline executing upload requests against Vercel backend point
     async function directUploadToB2(fileInstance) {
-      const tokenResponse = await fetch('/api/get-upload-url', { method: 'POST' });
+      const tokenResponse = await fetch(`${apiBaseUrl}/api/get-upload-url`, { method: 'POST' });
       if (!tokenResponse.ok) {
         const errorPayload = await tokenResponse.json().catch(() => ({ error: 'Authorization endpoint failed' }));
         throw new Error(errorPayload.error || 'Authorization endpoint failed');
@@ -257,7 +262,7 @@
     }
 
     async function submitRegistrationData(completeSuchiData) {
-      const response = await fetch('/api/submit-registration', {
+      const response = await fetch(`${apiBaseUrl}/api/submit-registration`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(completeSuchiData)
