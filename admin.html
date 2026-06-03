@@ -89,11 +89,12 @@
 
           return `
             <tr>
-              <td>${item.companyName || item.fileName}</td>
+              <td>${item.companyName || item.fileName}${item.businessDescription ? `<div class="cell-note">${item.businessDescription}</div>` : ''}</td>
               <td>${item.fullName || ''}</td>
               <td>${item.contactNumber || ''}</td>
               <td>${item.panNumber || ''}</td>
               <td>${item.shopType || ''}</td>
+              <td>${item.address || ''}</td>
               <td>${item.submittedAt || ''}</td>
               <td>${summaryLink}<span class="small-text">ID: ${item.fileId}</span></td>
               <td>${rateLink}</td>
@@ -105,7 +106,7 @@
 
         document.getElementById('content').innerHTML = `
           <table>
-            <thead><tr><th>Company</th><th>Contact</th><th>Phone</th><th>PAN</th><th>Shop Type</th><th>Submitted At</th><th>Summary</th><th>Rate</th><th>Others</th><th>All</th></tr></thead>
+            <thead><tr><th>Company</th><th>Contact</th><th>Phone</th><th>PAN</th><th>Shop Type</th><th>Address</th><th>Submitted At</th><th>Summary</th><th>Rate</th><th>Others</th><th>All</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
         `;

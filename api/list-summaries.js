@@ -72,6 +72,7 @@ export default async function handler(req, res) {
             panNumber: row.getCell(3).value || '',
             contactNumber: row.getCell(4).value || '',
             address: row.getCell(5).value || '',
+            businessDescription: row.getCell(6).value || '',
             shopType: row.getCell(7).value || '',
             submittedAt: row.getCell(8).value || '',
             documents: {
