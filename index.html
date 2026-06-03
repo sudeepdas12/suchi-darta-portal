@@ -156,6 +156,10 @@
         </button>
       </div>
 
+      <div id="summaryDownloadContainer" class="mt-6 hidden rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <p class="text-sm text-slate-600 mb-2">Summary file ready:</p>
+        <a id="summaryDownloadLink" class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900 border border-slate-300 hover:bg-slate-100" href="#" target="_blank" rel="noreferrer noopener">Download registration summary</a>
+      </div>
     </form>
   </div>
 
@@ -252,6 +256,20 @@
       return `${sanitizeB2Path(companyName)}_${sanitizeB2Path(panNumber)}`;
     }
 
+    function showSummaryDownload(fileId, fileName) {
+      const container = document.getElementById('summaryDownloadContainer');
+      const link = document.getElementById('summaryDownloadLink');
+      if (!fileId) {
+        container.classList.add('hidden');
+        link.href = '#';
+        return;
+      }
+
+      const safeName = encodeURIComponent(fileName || 'registration-summary.xlsx');
+      link.href = `${apiBaseUrl}/api/download-summary?fileId=${encodeURIComponent(fileId)}&name=${safeName}`;
+      container.classList.remove('hidden');
+    }
+
     // Helper pipeline executing upload requests against Vercel backend point
     async function directUploadToB2(fileInstance, folderPath) {
       const tokenResponse = await fetch(`${apiBaseUrl}/api/get-upload-url`, { method: 'POST' });
@@ -344,7 +362,12 @@
           }
         };
 
-        await submitRegistrationData(completeSuchiData);
+        const submitResult = await submitRegistrationData(completeSuchiData);
+        if (submitResult?.success && submitResult.excelFileId) {
+          showSummaryDownload(submitResult.excelFileId, submitResult.excelFileName);
+        } else {
+          showSummaryDownload(null);
+        }
 
         console.log('Compiled Payload:', completeSuchiData);
         alert('सूची दर्ता फारम सफलतापूर्वक प्राप्त भयो ! (Registration submitted successfully)');
