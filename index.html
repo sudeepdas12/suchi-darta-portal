@@ -7,20 +7,53 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      min-height: 100vh;
+      margin: 0;
+      background: radial-gradient(circle at top left, rgba(99,102,241,0.20), transparent 28%),
+                  radial-gradient(circle at bottom right, rgba(56,189,248,0.16), transparent 30%),
+                  linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+      color: #0f172a;
+    }
+    #appCard {
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(255,255,255,0.72);
+      box-shadow: 0 40px 90px rgba(15,23,42,0.18);
+      backdrop-filter: blur(24px) saturate(140%);
+      border-radius: 2rem;
+    }
     .form-input {
       width: 100%;
-      border-radius: 0.5rem;
-      border: 1px solid #e6eef6;
-      padding: 0.625rem 1rem;
-      font-size: 0.875rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(148,163,184,0.24);
+      padding: 0.9rem 1.1rem;
+      font-size: 0.95rem;
       color: #0f172a;
-      background: #fff;
-      box-shadow: 0 1px 2px rgba(15,23,42,0.03);
-      transition: box-shadow .15s ease, border-color .15s ease;
+      background: rgba(255,255,255,0.84);
+      box-shadow: inset 0 1px 2px rgba(15,23,42,0.04), 0 8px 20px rgba(15,23,42,0.04);
+      transition: box-shadow .2s ease, border-color .2s ease, background .2s ease;
     }
     .form-input::placeholder { color: #94a3b8; }
-    .form-input:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 6px rgba(59,130,246,0.06); }
+    .form-input:focus {
+      outline: none;
+      border-color: rgba(59,130,246,0.55);
+      box-shadow: 0 0 0 6px rgba(59,130,246,0.12);
+      background: rgba(255,255,255,0.98);
+    }
+    .upload-block {
+      background: rgba(255,255,255,0.86);
+      border-color: rgba(148,163,184,0.18);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7);
+    }
+    .dropzone {
+      background: rgba(248,250,252,0.96);
+      border-color: rgba(148,163,184,0.26);
+    }
+    .dropzone:hover {
+      background: rgba(255,255,255,0.96);
+      border-color: rgba(59,130,246,0.32);
+    }
   </style>
 </head>
 <body class="text-slate-800 min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-8">
@@ -32,7 +65,7 @@
     <div style="position:absolute;inset:0;background:linear-gradient(180deg, rgba(6,11,23,0.18) 0%, rgba(15,23,42,0.18) 100%);mix-blend-mode:overlay;"></div>
   </div>
 
-  <div id="appCard" class="w-full max-w-2xl rounded-2xl p-6 sm:p-8" style="background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.78)); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(2,6,23,0.45); backdrop-filter: blur(8px) saturate(120%);">
+  <div id="appCard" class="w-full max-w-2xl rounded-2xl p-6 sm:p-8">
     <div class="mb-8 border-b border-slate-100 pb-6">
       <div class="text-center">
         <h1 class="text-3xl font-extrabold tracking-wider text-indigo-700 mb-1">आरविवि मर्चेन्ट बैंकिङ्ग लि.</h1>
