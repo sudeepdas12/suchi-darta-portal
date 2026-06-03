@@ -237,28 +237,48 @@
       ? 'https://suchi-darta-portal.vercel.app'
       : window.location.origin;
 
+    function sanitizeB2Path(value) {
+      return String(value || '')
+        .trim()
+        .replace(/[^a-zA-Z0-9._-]+/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_+|_+$/g, '')
+        .toLowerCase();
+    }
+
+    function getUserFolder() {
+      const companyName = document.getElementById('companyName').value || 'unknown-company';
+      const panNumber = document.getElementById('panNumber').value || 'unknown-pan';
+      return `${sanitizeB2Path(companyName)}_${sanitizeB2Path(panNumber)}`;
+    }
+
     // Helper pipeline executing upload requests against Vercel backend point
-    async function directUploadToB2(fileInstance) {
+    async function directUploadToB2(fileInstance, folderPath) {
       const tokenResponse = await fetch(`${apiBaseUrl}/api/get-upload-url`, { method: 'POST' });
       if (!tokenResponse.ok) {
         const errorPayload = await tokenResponse.json().catch(() => ({ error: 'Authorization endpoint failed' }));
         throw new Error(errorPayload.error || 'Authorization endpoint failed');
       }
       const { uploadUrl, uploadAuthToken } = await tokenResponse.json();
+      const storedFileName = `${folderPath}/${Date.now()}_${sanitizeB2Path(fileInstance.name)}`;
 
       const uploadResponse = await fetch(uploadUrl, {
         method: 'POST',
         headers: {
           'Authorization': uploadAuthToken,
-          'X-Bz-File-Name': encodeURIComponent(`${Date.now()}_${fileInstance.name}`),
+          'X-Bz-File-Name': encodeURIComponent(storedFileName),
           'Content-Type': fileInstance.type,
           'X-Bz-Content-Sha1': 'do_not_verify'
         },
         body: fileInstance
       });
 
-      if (!uploadResponse.ok) throw new Error(`Backblaze upload failed for ${fileInstance.name}`);
-      return await uploadResponse.json();
+      if (!uploadResponse.ok) {
+        const errorPayload = await uploadResponse.json().catch(() => ({ error: 'Backblaze upload failed' }));
+        throw new Error(errorPayload.error || `Backblaze upload failed for ${fileInstance.name}`);
+      }
+
+      return { ...await uploadResponse.json(), originalName: fileInstance.name, storedFileName };
     }
 
     async function submitRegistrationData(completeSuchiData) {
@@ -294,13 +314,16 @@
           if (f.size > MAX_FILE_BYTES) console.warn(`${f.name} is larger than recommended`);
         });
 
+        const userFolder = getUserFolder();
+
         const [resPan, resReg, resTax] = await Promise.all([
-          directUploadToB2(filePan),
-          directUploadToB2(fileReg),
-          directUploadToB2(fileTax)
+          directUploadToB2(filePan, `${userFolder}/attachments`),
+          directUploadToB2(fileReg, `${userFolder}/attachments`),
+          directUploadToB2(fileTax, `${userFolder}/attachments`)
         ]);
 
         const completeSuchiData = {
+          userFolder,
           companyName: document.getElementById('companyName').value,
           fullName: document.getElementById('fullName').value,
           panNumber: document.getElementById('panNumber').value,
@@ -309,8 +332,14 @@
           businessDescription: document.getElementById('companySales').value,
           documents: {
             panFileId: resPan.fileId,
+            panOriginalName: resPan.originalName,
+            panStoredPath: resPan.storedFileName,
             registrationFileId: resReg.fileId,
-            taxClearanceFileId: resTax.fileId
+            registrationOriginalName: resReg.originalName,
+            registrationStoredPath: resReg.storedFileName,
+            taxClearanceFileId: resTax.fileId,
+            taxClearanceOriginalName: resTax.originalName,
+            taxClearanceStoredPath: resTax.storedFileName
           }
         };
 
