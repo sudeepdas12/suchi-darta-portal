@@ -32,6 +32,10 @@
       return new URLSearchParams(window.location.search).get(name);
     }
 
+    const apiBaseUrl = window.location.protocol === 'file:'
+      ? 'https://suchi-darta-portal.vercel.app'
+      : window.location.origin;
+
     async function loadSummaries() {
       const token = getQueryParam('token');
       if (!token) {
@@ -41,10 +45,10 @@
 
       // Set up consolidated download link
       const consolidatedLink = document.getElementById('consolidatedLink');
-      consolidatedLink.href = `/api/export-consolidated?token=${encodeURIComponent(token)}`;
+      consolidatedLink.href = `${apiBaseUrl}/api/export-consolidated?token=${encodeURIComponent(token)}`;
 
       try {
-        const response = await fetch(`/api/list-summaries?token=${encodeURIComponent(token)}`);
+        const response = await fetch(`${apiBaseUrl}/api/list-summaries?token=${encodeURIComponent(token)}`);
         if (!response.ok) {
           const error = await response.json().catch(() => ({ error: 'Unable to fetch summaries' }));
           document.getElementById('status').textContent = 'Error: ' + (error.error || 'Unable to fetch summaries');
@@ -64,15 +68,17 @@
           const rateStoredPath = item.documents && item.documents.rateStoredPath ? item.documents.rateStoredPath : '';
           const rateName = rateStoredPath ? rateStoredPath.split('/').pop() : '';
           const rateLink = rateFileId
-            ? `<a href="/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(rateFileId)}&name=${encodeURIComponent(rateName)}">${rateName || 'Rate File'}</a>`
+            ? `<a href="${apiBaseUrl}/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(rateFileId)}&name=${encodeURIComponent(rateName)}">${rateName || 'Rate File'}</a>`
             : '';
 
           const othersFileId = item.documents && item.documents.othersFileId ? item.documents.othersFileId : '';
           const othersStoredPath = item.documents && item.documents.othersStoredPath ? item.documents.othersStoredPath : '';
           const othersName = othersStoredPath ? othersStoredPath.split('/').pop() : '';
           const othersLink = othersFileId
-            ? `<a href="/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(othersFileId)}&name=${encodeURIComponent(othersName)}">${othersName || 'Others File'}</a>`
+            ? `<a href="${apiBaseUrl}/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(othersFileId)}&name=${encodeURIComponent(othersName)}">${othersName || 'Others File'}</a>`
             : '';
+
+          const allLink = `<a href="${apiBaseUrl}/api/download-vendor-bundle?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">All Details</a>`;
 
           return `
             <tr>
@@ -81,15 +87,7 @@
               <td>${item.panNumber || ''}</td>
               <td>${item.shopType || ''}</td>
               <td>${item.fileId}</td>
-              const allLink = `<a href="/api/download-vendor-bundle?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">All Details</a>`;
-          return `
-            <tr>
-              <td>${item.companyName || item.fileName}</td>
-              <td>${item.fullName || ''}</td>
-              <td>${item.panNumber || ''}</td>
-              <td>${item.shopType || ''}</td>
-              <td>${item.fileId}</td>
-              <td><a href="/api/download-summary?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">Summary</a></td>
+              <td><a href="${apiBaseUrl}/api/download-summary?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">Summary</a></td>
               <td>${rateLink}</td>
               <td>${othersLink}</td>
               <td>${allLink}</td>
