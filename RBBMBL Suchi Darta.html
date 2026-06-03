@@ -235,7 +235,10 @@
     // Helper pipeline executing upload requests against Vercel backend point
     async function directUploadToB2(fileInstance) {
       const tokenResponse = await fetch('/api/get-upload-url', { method: 'POST' });
-      if (!tokenResponse.ok) throw new Error('Authorization endpoint failed');
+      if (!tokenResponse.ok) {
+        const errorPayload = await tokenResponse.json().catch(() => ({ error: 'Authorization endpoint failed' }));
+        throw new Error(errorPayload.error || 'Authorization endpoint failed');
+      }
       const { uploadUrl, uploadAuthToken } = await tokenResponse.json();
 
       const uploadResponse = await fetch(uploadUrl, {
