@@ -37,32 +37,42 @@ export default async function handler(req, res) {
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet('Registration');
     sheet.columns = [
-      { header: 'Field', key: 'field', width: 30 },
-      { header: 'Value', key: 'value', width: 70 }
+      { header: 'Company Name', key: 'companyName', width: 30 },
+      { header: 'Full Name', key: 'fullName', width: 30 },
+      { header: 'PAN Number', key: 'panNumber', width: 20 },
+      { header: 'Contact Number', key: 'contactNumber', width: 20 },
+      { header: 'Address', key: 'address', width: 40 },
+      { header: 'Business Description', key: 'businessDescription', width: 40 },
+      { header: 'Submitted At', key: 'submittedAt', width: 25 },
+      { header: 'PAN File Name', key: 'panOriginalName', width: 40 },
+      { header: 'PAN Stored Path', key: 'panStoredPath', width: 60 },
+      { header: 'PAN File ID', key: 'panFileId', width: 36 },
+      { header: 'Registration File Name', key: 'registrationOriginalName', width: 40 },
+      { header: 'Registration Stored Path', key: 'registrationStoredPath', width: 60 },
+      { header: 'Registration File ID', key: 'registrationFileId', width: 36 },
+      { header: 'Tax Clearance File Name', key: 'taxClearanceOriginalName', width: 40 },
+      { header: 'Tax Clearance Stored Path', key: 'taxClearanceStoredPath', width: 60 },
+      { header: 'Tax Clearance File ID', key: 'taxClearanceFileId', width: 36 }
     ];
 
-    sheet.addRow({ field: 'Company Name', value: safeText(payload.companyName) });
-    sheet.addRow({ field: 'Full Name', value: safeText(payload.fullName) });
-    sheet.addRow({ field: 'PAN Number', value: safeText(payload.panNumber) });
-    sheet.addRow({ field: 'Contact Number', value: safeText(payload.contactNumber) });
-    sheet.addRow({ field: 'Address', value: safeText(payload.address) });
-    sheet.addRow({ field: 'Business Description', value: safeText(payload.businessDescription) });
-    sheet.addRow({ field: 'Submitted At', value: new Date().toISOString() });
-    sheet.addRow({ field: 'User Folder', value: userFolder });
-
-    sheet.addRow({ field: '', value: '' });
-    sheet.addRow({ field: 'Attachment', value: 'Details' });
-    sheet.addRow({ field: 'PAN File Name', value: safeText(payload.documents?.panOriginalName) });
-    sheet.addRow({ field: 'PAN Stored Path', value: safeText(payload.documents?.panStoredPath) });
-    sheet.addRow({ field: 'PAN File ID', value: safeText(payload.documents?.panFileId) });
-    sheet.addRow({ field: '' , value: '' });
-    sheet.addRow({ field: 'Registration File Name', value: safeText(payload.documents?.registrationOriginalName) });
-    sheet.addRow({ field: 'Registration Stored Path', value: safeText(payload.documents?.registrationStoredPath) });
-    sheet.addRow({ field: 'Registration File ID', value: safeText(payload.documents?.registrationFileId) });
-    sheet.addRow({ field: '' , value: '' });
-    sheet.addRow({ field: 'Tax Clearance File Name', value: safeText(payload.documents?.taxClearanceOriginalName) });
-    sheet.addRow({ field: 'Tax Clearance Stored Path', value: safeText(payload.documents?.taxClearanceStoredPath) });
-    sheet.addRow({ field: 'Tax Clearance File ID', value: safeText(payload.documents?.taxClearanceFileId) });
+    sheet.addRow({
+      companyName: safeText(payload.companyName),
+      fullName: safeText(payload.fullName),
+      panNumber: safeText(payload.panNumber),
+      contactNumber: safeText(payload.contactNumber),
+      address: safeText(payload.address),
+      businessDescription: safeText(payload.businessDescription),
+      submittedAt: new Date().toISOString(),
+      panOriginalName: safeText(payload.documents?.panOriginalName),
+      panStoredPath: safeText(payload.documents?.panStoredPath),
+      panFileId: safeText(payload.documents?.panFileId),
+      registrationOriginalName: safeText(payload.documents?.registrationOriginalName),
+      registrationStoredPath: safeText(payload.documents?.registrationStoredPath),
+      registrationFileId: safeText(payload.documents?.registrationFileId),
+      taxClearanceOriginalName: safeText(payload.documents?.taxClearanceOriginalName),
+      taxClearanceStoredPath: safeText(payload.documents?.taxClearanceStoredPath),
+      taxClearanceFileId: safeText(payload.documents?.taxClearanceFileId)
+    });
 
     const buffer = await workbook.xlsx.writeBuffer();
 

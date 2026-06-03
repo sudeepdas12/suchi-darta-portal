@@ -309,9 +309,10 @@
 
         if (!filePan || !fileReg || !fileTax) throw new Error('Please attach all required documents');
 
-        // optional: re-check sizes locally before upload
         [filePan, fileReg, fileTax].forEach(f => {
-          if (f.size > MAX_FILE_BYTES) console.warn(`${f.name} is larger than recommended`);
+          if (f.size > MAX_FILE_BYTES) {
+            throw new Error(`File too large: ${f.name}. Maximum allowed is ${formatBytes(MAX_FILE_BYTES)}.`);
+          }
         });
 
         const userFolder = getUserFolder();
