@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Summary Files</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 24px; color: #111; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { border: 1px solid #d1d5db; padding: 10px; text-align: left; }
+    th { background: #f8fafc; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .notice { background: #fef3c7; border: 1px solid #fcd34d; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Admin Summary Files</h1>
+  <div class="notice">
+    Open this page with a token query string: <strong>admin.html?token=YOUR_TOKEN</strong>
+  </div>
+  <div id="status">Loading summary file list...</div>
+  <div id="content"></div>
+
+  <script>
+    function getQueryParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    async function loadSummaries() {
+      const token = getQueryParam('token');
+      if (!token) {
+        document.getElementById('status').textContent = 'Missing admin token. Use ?token=YOUR_TOKEN';
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/list-summaries?token=${encodeURIComponent(token)}`);
+        if (!response.ok) {
+          const error = await response.json().catch(() => ({ error: 'Unable to fetch summaries' }));
+          document.getElementById('status').textContent = 'Error: ' + (error.error || 'Unable to fetch summaries');
+          return;
+        }
+
+        const data = await response.json();
+        const summaries = data.summaries || [];
+        if (!summaries.length) {
+          document.getElementById('status').textContent = 'No summary files found.';
+          return;
+        }
+
+        document.getElementById('status').textContent = `Found ${summaries.length} summary file(s).`;
+        const rows = summaries.map(item => `
+          <tr>
+            <td>${item.fileName}</td>
+            <td>${item.fileId}</td>
+            <td><a href="/api/download-summary?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">Download</a></td>
+          </tr>
+        `).join('');
+
+        document.getElementById('content').innerHTML = `
+          <table>
+            <thead><tr><th>File Name</th><th>File ID</th><th>Download</th></tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      } catch (error) {
+        document.getElementById('status').textContent = 'Error fetching summaries: ' + error.message;
+      }
+    }
+
+    loadSummaries();
+  </script>
+</body>
+</html>
