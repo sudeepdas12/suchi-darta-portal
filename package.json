@@ -2,6 +2,7 @@
   "name": "suchi-darta-portal",
   "version": "1.0.0",
   "description": "Suchi Darta Registration Platform using Vercel and Backblaze B2",
+  "type": "module",
   "main": "index.html",
   "dependencies": {
     "backblaze-b2": "^1.7.0"
