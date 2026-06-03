@@ -253,6 +253,21 @@
       return await uploadResponse.json();
     }
 
+    async function submitRegistrationData(completeSuchiData) {
+      const response = await fetch('/api/submit-registration', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(completeSuchiData)
+      });
+
+      if (!response.ok) {
+        const errorPayload = await response.json().catch(() => ({ error: 'Server save failed' }));
+        throw new Error(errorPayload.error || 'Unable to save registration data');
+      }
+
+      return await response.json();
+    }
+
     async function handleFormSubmit(event) {
       event.preventDefault();
       const submitBtn = document.getElementById('submitBtn');
@@ -290,6 +305,8 @@
             taxClearanceFileId: resTax.fileId
           }
         };
+
+        await submitRegistrationData(completeSuchiData);
 
         console.log('Compiled Payload:', completeSuchiData);
         alert('सूची दर्ता फारम सफलतापूर्वक प्राप्त भयो ! (Registration submitted successfully)');
