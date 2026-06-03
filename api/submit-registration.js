@@ -43,6 +43,7 @@ export default async function handler(req, res) {
       { header: 'Contact Number', key: 'contactNumber', width: 20 },
       { header: 'Address', key: 'address', width: 40 },
       { header: 'Business Description', key: 'businessDescription', width: 40 },
+      { header: 'Shop Type', key: 'shopType', width: 20 },
       { header: 'Submitted At', key: 'submittedAt', width: 25 },
       { header: 'PAN File Name', key: 'panOriginalName', width: 40 },
       { header: 'PAN Stored Path', key: 'panStoredPath', width: 60 },
@@ -52,7 +53,10 @@ export default async function handler(req, res) {
       { header: 'Registration File ID', key: 'registrationFileId', width: 36 },
       { header: 'Tax Clearance File Name', key: 'taxClearanceOriginalName', width: 40 },
       { header: 'Tax Clearance Stored Path', key: 'taxClearanceStoredPath', width: 60 },
-      { header: 'Tax Clearance File ID', key: 'taxClearanceFileId', width: 36 }
+      { header: 'Tax Clearance File ID', key: 'taxClearanceFileId', width: 36 },
+      { header: 'Others File Name', key: 'othersOriginalName', width: 40 },
+      { header: 'Others Stored Path', key: 'othersStoredPath', width: 60 },
+      { header: 'Others File ID', key: 'othersFileId', width: 36 }
     ];
 
     sheet.addRow({
@@ -62,6 +66,7 @@ export default async function handler(req, res) {
       contactNumber: safeText(payload.contactNumber),
       address: safeText(payload.address),
       businessDescription: safeText(payload.businessDescription),
+      shopType: safeText(payload.shopType),
       submittedAt: new Date().toISOString(),
       panOriginalName: safeText(payload.documents?.panOriginalName),
       panStoredPath: safeText(payload.documents?.panStoredPath),
@@ -71,7 +76,10 @@ export default async function handler(req, res) {
       registrationFileId: safeText(payload.documents?.registrationFileId),
       taxClearanceOriginalName: safeText(payload.documents?.taxClearanceOriginalName),
       taxClearanceStoredPath: safeText(payload.documents?.taxClearanceStoredPath),
-      taxClearanceFileId: safeText(payload.documents?.taxClearanceFileId)
+      taxClearanceFileId: safeText(payload.documents?.taxClearanceFileId),
+      othersOriginalName: safeText(payload.documents?.othersOriginalName),
+      othersStoredPath: safeText(payload.documents?.othersStoredPath),
+      othersFileId: safeText(payload.documents?.othersFileId)
     });
 
     const buffer = await workbook.xlsx.writeBuffer();

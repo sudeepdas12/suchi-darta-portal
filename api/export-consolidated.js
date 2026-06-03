@@ -66,6 +66,7 @@ export default async function handler(req, res) {
       { header: 'Contact Number', key: 'contactNumber', width: 20 },
       { header: 'Address', key: 'address', width: 40 },
       { header: 'Business Description', key: 'businessDescription', width: 40 },
+      { header: 'Shop Type', key: 'shopType', width: 20 },
       { header: 'Submitted At', key: 'submittedAt', width: 25 },
       { header: 'PAN File Name', key: 'panOriginalName', width: 40 },
       { header: 'PAN File Path', key: 'panStoredPath', width: 60 },
@@ -75,7 +76,10 @@ export default async function handler(req, res) {
       { header: 'Registration File ID', key: 'registrationFileId', width: 36 },
       { header: 'Tax Clearance File Name', key: 'taxClearanceOriginalName', width: 40 },
       { header: 'Tax Clearance File Path', key: 'taxClearanceStoredPath', width: 60 },
-      { header: 'Tax Clearance File ID', key: 'taxClearanceFileId', width: 36 }
+      { header: 'Tax Clearance File ID', key: 'taxClearanceFileId', width: 36 },
+      { header: 'Others File Name', key: 'othersOriginalName', width: 40 },
+      { header: 'Others File Path', key: 'othersStoredPath', width: 60 },
+      { header: 'Others File ID', key: 'othersFileId', width: 36 }
     ];
 
     // Download and extract data from each summary file
@@ -101,16 +105,20 @@ export default async function handler(req, res) {
             contactNumber: row.getCell(4).value || '',
             address: row.getCell(5).value || '',
             businessDescription: row.getCell(6).value || '',
-            submittedAt: row.getCell(7).value || '',
-            panOriginalName: row.getCell(8).value || '',
-            panStoredPath: row.getCell(9).value || '',
-            panFileId: row.getCell(10).value || '',
-            registrationOriginalName: row.getCell(11).value || '',
-            registrationStoredPath: row.getCell(12).value || '',
-            registrationFileId: row.getCell(13).value || '',
-            taxClearanceOriginalName: row.getCell(14).value || '',
-            taxClearanceStoredPath: row.getCell(15).value || '',
-            taxClearanceFileId: row.getCell(16).value || ''
+            shopType: row.getCell(7).value || '',
+            submittedAt: row.getCell(8).value || '',
+            panOriginalName: row.getCell(9).value || '',
+            panStoredPath: row.getCell(10).value || '',
+            panFileId: row.getCell(11).value || '',
+            registrationOriginalName: row.getCell(12).value || '',
+            registrationStoredPath: row.getCell(13).value || '',
+            registrationFileId: row.getCell(14).value || '',
+            taxClearanceOriginalName: row.getCell(15).value || '',
+            taxClearanceStoredPath: row.getCell(16).value || '',
+            taxClearanceFileId: row.getCell(17).value || '',
+            othersOriginalName: row.getCell(18).value || '',
+            othersStoredPath: row.getCell(19).value || '',
+            othersFileId: row.getCell(20).value || ''
           };
 
           masterSheet.addRow(rowData);
