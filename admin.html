@@ -85,7 +85,6 @@
             : '<span class="small-text">No Others file</span>';
 
           const summaryLink = `<a class="button-link" href="${apiBaseUrl}/api/download-summary?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">Summary</a>`;
-          const allLink = `<a class="button-link" href="${apiBaseUrl}/api/download-vendor-bundle?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">All Details</a>`;
 
           return `
             <tr>
@@ -99,14 +98,13 @@
               <td>${summaryLink}<span class="small-text">ID: ${item.fileId}</span></td>
               <td>${rateLink}</td>
               <td>${othersLink}</td>
-              <td>${allLink}</td>
             </tr>
           `;
         }).join('');
 
         document.getElementById('content').innerHTML = `
           <table>
-            <thead><tr><th>Company</th><th>Contact</th><th>Phone</th><th>PAN</th><th>Shop Type</th><th>Address</th><th>Submitted At</th><th>Summary</th><th>Rate</th><th>Others</th><th>All</th></tr></thead>
+            <thead><tr><th>Company</th><th>Contact</th><th>Phone</th><th>PAN</th><th>Shop Type</th><th>Address</th><th>Submitted At</th><th>Summary</th><th>Rate</th><th>Others</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
         `;
