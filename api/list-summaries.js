@@ -70,7 +70,10 @@ export default async function handler(req, res) {
             companyName: row.getCell(1).value || '',
             fullName: row.getCell(2).value || '',
             panNumber: row.getCell(3).value || '',
+            contactNumber: row.getCell(4).value || '',
+            address: row.getCell(5).value || '',
             shopType: row.getCell(7).value || '',
+            submittedAt: row.getCell(8).value || '',
             documents: {
               panOriginalName: row.getCell(9).value || '',
               panStoredPath: row.getCell(10).value || '',

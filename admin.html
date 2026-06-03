@@ -5,13 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Summary Files</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 24px; color: #111; }
-    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-    th, td { border: 1px solid #d1d5db; padding: 10px; text-align: left; }
-    th { background: #f8fafc; }
+    body { font-family: Arial, sans-serif; padding: 24px; color: #111; background: #f8fafc; }
+    h1 { margin-bottom: 12px; font-size: 2rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; background: #fff; box-shadow: 0 10px 30px rgba(15,23,42,0.08); }
+    th, td { border: 1px solid #d1d5db; padding: 12px 14px; text-align: left; vertical-align: top; }
+    th { background: #eef2ff; color: #0f172a; font-weight: 700; }
+    tbody tr:nth-child(odd) { background: #f8fafc; }
+    td { word-break: break-word; }
     a { color: #2563eb; text-decoration: none; }
     a:hover { text-decoration: underline; }
     .notice { background: #fef3c7; border: 1px solid #fcd34d; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+    .button-link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 6px 10px; background: #eef2ff; color: #1d4ed8; border-radius: 8px; border: 1px solid #c7d2fe; font-weight: 600; }
+    .small-text { display: block; margin-top: 4px; color: #475569; font-size: 0.85rem; }
+    .cell-note { color: #475569; font-size: 0.9rem; margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -68,26 +74,28 @@
           const rateStoredPath = item.documents && item.documents.rateStoredPath ? item.documents.rateStoredPath : '';
           const rateName = rateStoredPath ? rateStoredPath.split('/').pop() : '';
           const rateLink = rateFileId
-            ? `<a href="${apiBaseUrl}/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(rateFileId)}&name=${encodeURIComponent(rateName)}">${rateName || 'Rate File'}</a>`
-            : '';
+            ? `<a class="button-link" href="${apiBaseUrl}/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(rateFileId)}&name=${encodeURIComponent(rateName)}">${rateName || 'Rate File'}</a>`
+            : '<span class="small-text">No Rate file</span>';
 
           const othersFileId = item.documents && item.documents.othersFileId ? item.documents.othersFileId : '';
           const othersStoredPath = item.documents && item.documents.othersStoredPath ? item.documents.othersStoredPath : '';
           const othersName = othersStoredPath ? othersStoredPath.split('/').pop() : '';
           const othersLink = othersFileId
-            ? `<a href="${apiBaseUrl}/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(othersFileId)}&name=${encodeURIComponent(othersName)}">${othersName || 'Others File'}</a>`
-            : '';
+            ? `<a class="button-link" href="${apiBaseUrl}/api/download-attachment?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(othersFileId)}&name=${encodeURIComponent(othersName)}">${othersName || 'Others File'}</a>`
+            : '<span class="small-text">No Others file</span>';
 
-          const allLink = `<a href="${apiBaseUrl}/api/download-vendor-bundle?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">All Details</a>`;
+          const summaryLink = `<a class="button-link" href="${apiBaseUrl}/api/download-summary?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">Summary</a>`;
+          const allLink = `<a class="button-link" href="${apiBaseUrl}/api/download-vendor-bundle?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">All Details</a>`;
 
           return `
             <tr>
               <td>${item.companyName || item.fileName}</td>
               <td>${item.fullName || ''}</td>
+              <td>${item.contactNumber || ''}</td>
               <td>${item.panNumber || ''}</td>
               <td>${item.shopType || ''}</td>
-              <td>${item.fileId}</td>
-              <td><a href="${apiBaseUrl}/api/download-summary?token=${encodeURIComponent(token)}&fileId=${encodeURIComponent(item.fileId)}">Summary</a></td>
+              <td>${item.submittedAt || ''}</td>
+              <td>${summaryLink}<span class="small-text">ID: ${item.fileId}</span></td>
               <td>${rateLink}</td>
               <td>${othersLink}</td>
               <td>${allLink}</td>
@@ -97,7 +105,7 @@
 
         document.getElementById('content').innerHTML = `
           <table>
-            <thead><tr><th>Company</th><th>Contact</th><th>PAN</th><th>Shop Type</th><th>Summary File ID</th><th>Summary</th><th>Rate</th><th>Others</th><th>All</th></tr></thead>
+            <thead><tr><th>Company</th><th>Contact</th><th>Phone</th><th>PAN</th><th>Shop Type</th><th>Submitted At</th><th>Summary</th><th>Rate</th><th>Others</th><th>All</th></tr></thead>
             <tbody>${rows}</tbody>
           </table>
         `;
