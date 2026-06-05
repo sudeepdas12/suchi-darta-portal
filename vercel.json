@@ -1,9 +1,15 @@
 {
   "buildCommand": "echo 'Static site - no build needed'",
+  "env": {
+    "VERCEL_URL": "@vercel_url"
+  },
   "routes": [
     {
       "src": "/(.*)",
       "dest": "/$1"
     }
+  ],
+  "alias": [
+    "rbbmbl.suchi-darta-portal.vercel.app"
   ]
 }
